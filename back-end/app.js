@@ -1,8 +1,16 @@
 const express = require("express");
+const cors = require("cors");
 const app = express();
 
+app.use(cors());
+
+app.use((req, res, next));
+
 app.get("/", async (req, res) => {
-  res.send("Bem Vindo");
+  return res.json({
+    erro: false,
+    dataHOne: "Teste",
+  });
 });
 
 app.listen(8080, () => {

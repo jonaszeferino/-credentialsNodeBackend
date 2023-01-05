@@ -2,18 +2,21 @@ import { useState } from "react";
 import styles from "../styles/Home.module.css";
 import { ErrorPage } from "./error-page";
 import { format } from "date-fns";
+import { useSWR } from "swr";
 
 export default function reservations() {
   let [reservationStock, setReservationStock] = useState([]);
   let [isError, setError] = useState(false);
 
   const apiCall = (event) => {
-    const url = `https://leposticheoms.layer.core.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`;
+    const url = useSWR(
+      `https://leposticheoms.layer.core-hlg.dcg.com.br/v1/Inventory/API.svc/web/SearchInventorySKU`,
+      fetcher
+    );
 
     fetch(url, {
       headers: new Headers({
         BasicAuthorization: process.env.NEXT_PUBLIC_LE_AUTH,
-        // "Basic Y29yZS5qb25hcy56ZWZlcmlubzp3YXRlcmZhbGwxOTA5",
         "Content-Type": "application/json",
         "access-control-allow-origin": "*",
         Accept: "application/json",
@@ -58,10 +61,10 @@ export default function reservations() {
           {reservationStock.map((reserve) => (
             <div className={styles.card} key={reserve.ProductID}>
               <span>Stock: {reserve.StockBalance}</span> <br />
-              <span>
+              {/* <span>
                 Data:{" "}
                 {format(new Date(reserve.LastUpdated), "dd/MM/yyyy HH:mm:ss")}
-              </span>
+              </span> */}
               <br />
             </div>
           ))}
